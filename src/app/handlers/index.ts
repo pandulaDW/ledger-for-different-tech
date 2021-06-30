@@ -1,1 +1,1 @@
-export { default as getLedgerEntries } from "./ledgerHandler";
+export * from "./ledgerHandler";

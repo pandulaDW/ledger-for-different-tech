@@ -1,21 +1,21 @@
-enum Frequency {
+export enum Frequency {
   WEEKLY = "WEEKLY",
   FORTNIGHTLY = "FORTNIGHTLY",
   MONTHLY = "MONTHLY",
 }
 
-interface LedgerRequest {
-  start_date: Date;
-  end_date: Date;
+export interface LedgerRequest {
+  startDate: Date;
+  endDate: Date;
   frequency: Frequency;
-  weekly_rent: number;
+  weeklyRent: number;
   timezone: string;
 }
 
 interface LedgerLineItem {
-  start_date: string;
-  end_date: string;
-  total_amount: number;
+  startDate: string;
+  endDate: string;
+  totalAmount: number;
 }
 
-type LedgerResponse = Array<LedgerLineItem>;
+export type LedgerResponse = Array<LedgerLineItem>;
