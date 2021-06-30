@@ -1,9 +1,8 @@
 import express from "express";
+import { getLedgerEntries } from "./handlers";
 
 const app = express();
 
-app.get("/", (_, res) => {
-  res.status(200).send("works!!!");
-});
+app.get("/ledger", getLedgerEntries);
 
 export default app;
