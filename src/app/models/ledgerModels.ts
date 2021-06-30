@@ -15,7 +15,7 @@ export interface LedgerRequest {
 interface LedgerLineItem {
   startDate: string;
   endDate: string;
-  totalAmount: number;
+  totalRent: number;
 }
 
 export type LedgerResponse = Array<LedgerLineItem>;

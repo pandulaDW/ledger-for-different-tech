@@ -1,41 +1,31 @@
 import { Frequency, LedgerRequest, LedgerResponse } from "../models";
-import { createDateSeq, SeqTuple } from "./ledgerUtils";
+import { createDateSeq, SeqItem } from "./ledgerUtils";
 
 export const createLedgerResponse = (req: LedgerRequest): LedgerResponse => {
-  const { startDate, endDate, frequency, weeklyRent } = req;
-  let dateSeq: Array<SeqTuple>;
+  const { frequency, weeklyRent } = req;
+  let dateSeq: Array<SeqItem>;
 
   switch (frequency) {
     case Frequency.WEEKLY:
-      dateSeq = createDateSeq(startDate, endDate, 7);
+      dateSeq = createDateSeq(req.startDate, req.endDate, 7);
     case Frequency.FORTNIGHTLY:
-      dateSeq = createDateSeq(startDate, endDate, 14);
+      dateSeq = createDateSeq(req.startDate, req.endDate, 14);
     case Frequency.MONTHLY:
       dateSeq = [];
   }
 
-  const ledgerResponse: LedgerResponse = dateSeq.map((seq) => {
-    if (seq[2] === 7 && frequency === Frequency.WEEKLY) {
-      return {
-        startDate: seq[0].toISOString(),
-        endDate: seq[1].toISOString(),
-        totalAmount: weeklyRent,
-      };
+  const ledgerResponse: LedgerResponse = dateSeq.map((seqItem) => {
+    const { startDate, endDate, dateDiff } = seqItem;
+
+    if (dateDiff === 7 && frequency === Frequency.WEEKLY) {
+      return { startDate, endDate, totalRent: weeklyRent };
     }
 
-    if (seq[2] === 14 && frequency === Frequency.FORTNIGHTLY) {
-      return {
-        startDate: seq[0].toISOString(),
-        endDate: seq[1].toISOString(),
-        totalAmount: weeklyRent * 2,
-      };
+    if (dateDiff === 14 && frequency === Frequency.FORTNIGHTLY) {
+      return { startDate, endDate, totalRent: weeklyRent * 2 };
     }
 
-    return {
-      startDate: seq[0].toISOString(),
-      endDate: seq[1].toISOString(),
-      totalAmount: (weeklyRent / 7) * seq[2],
-    };
+    if (dateDiff) return { startDate, endDate, totalRent: (weeklyRent / 7) * dateDiff };
   });
 
   return ledgerResponse;

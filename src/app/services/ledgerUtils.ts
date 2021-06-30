@@ -1,35 +1,71 @@
-import { addDays, dateDiffInDays } from "../utils/dateUtils";
+import { addDays } from "date-fns";
+import { dateDiffInDays, getNextMonthDate } from "../utils/dateUtils";
 
-// A tuple type consisting of startDate, endDate and the date difference
-export type SeqTuple = [Date, Date, number];
+// return list item type of createDateSeq function
+export interface SeqItem {
+  startDate: string;
+  endDate: string;
+  dateDiff: number | null;
+  isFullRange: boolean;
+}
 
-// returns a list of SeqTuple tuples for WEEKLY and FORTNIGHTLY frequency types
+// helper function to create a seq item
+const createSeqItem = (
+  start: Date,
+  end: Date,
+  dateDiff: number | null,
+  isFullRange = true
+) => {
+  return {
+    startDate: start.toISOString(),
+    endDate: end.toISOString(),
+    dateDiff,
+    isFullRange,
+  };
+};
+
+// returns a list of SeqItem for WEEKLY and FORTNIGHTLY frequency types
 export const createDateSeq = (startDate: Date, endDate: Date, freq: number) => {
   let currentStartDate = startDate;
   let currentEndDate = addDays(startDate, freq);
-  const dateTupleList: Array<SeqTuple> = [
-    [currentStartDate, currentEndDate, freq],
-  ];
+  const dateSeq: Array<SeqItem> = [createSeqItem(currentStartDate, currentEndDate, freq)];
 
   while (true) {
     if (currentEndDate >= endDate) {
-      dateTupleList.pop();
+      dateSeq.pop();
       const dateDiff = dateDiffInDays(currentStartDate, endDate);
-      dateTupleList.push([currentStartDate, endDate, dateDiff]);
+      dateSeq.push(createSeqItem(currentStartDate, currentEndDate, dateDiff));
       break;
     }
 
     currentStartDate = addDays(currentEndDate, 2);
     currentEndDate = addDays(currentStartDate, freq);
-    const tuple: SeqTuple = [currentStartDate, currentEndDate, freq];
-    dateTupleList.push(tuple);
+    const tuple = createSeqItem(currentStartDate, currentEndDate, freq);
+    dateSeq.push(tuple);
   }
 
-  return dateTupleList;
+  return dateSeq;
 };
 
-export const creatMonthSeq = (startDate: Date, endDate: Date) => {
+// returns a list of SeqItem for MONTHLY frequency types
+export const createMonthSeq = (startDate: Date, endDate: Date) => {
+  const requiredDay = startDate.getDate();
   let currentStartDate = startDate;
-  let currentEndDate = endDate;
-  let currentStartMonth = startDate.getMonth;
+  let currentEndDate = getNextMonthDate(startDate, requiredDay);
+  const dateSeq: Array<SeqItem> = [createSeqItem(currentStartDate, currentEndDate, null)];
+
+  // if the end date doesn't even fullfil one month
+  if (currentEndDate > endDate) {
+    dateSeq.pop();
+    return [createSeqItem(startDate, endDate, dateDiffInDays(startDate, endDate), false)];
+  }
+
+  while (true) {
+    currentStartDate = addDays(currentEndDate, 1);
+    currentEndDate = getNextMonthDate(currentEndDate, requiredDay);
+    dateSeq.push(createSeqItem(currentStartDate, currentEndDate, null));
+    if (currentEndDate > endDate) break;
+  }
+
+  return dateSeq;
 };
