@@ -15,17 +15,21 @@ export const createLedgerResponse = (req: LedgerRequest): LedgerResponse => {
   }
 
   const ledgerResponse: LedgerResponse = dateSeq.map((seqItem) => {
-    const { startDate, endDate, dateDiff } = seqItem;
+    const { startDate, endDate, dateDiff, isFullRange } = seqItem;
 
-    if (dateDiff === 7 && frequency === Frequency.WEEKLY) {
+    if (dateDiff === 6 && frequency === Frequency.WEEKLY) {
       return { startDate, endDate, totalRent: weeklyRent };
     }
 
-    if (dateDiff === 14 && frequency === Frequency.FORTNIGHTLY) {
+    if (dateDiff === 13 && frequency === Frequency.FORTNIGHTLY) {
       return { startDate, endDate, totalRent: weeklyRent * 2 };
     }
 
-    if (dateDiff) return { startDate, endDate, totalRent: (weeklyRent / 7) * dateDiff };
+    if (isFullRange && frequency === Frequency.MONTHLY) {
+      return { startDate, endDate, totalRent: ((weeklyRent / 7) * 365) / 12 };
+    }
+
+    return { startDate, endDate, totalRent: (weeklyRent / 7) * dateDiff };
   });
 
   return ledgerResponse;
