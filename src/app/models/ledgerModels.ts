@@ -12,7 +12,7 @@ export interface LedgerRequest {
   timezone: string;
 }
 
-interface LedgerLineItem {
+export interface LedgerLineItem {
   startDate: string;
   endDate: string;
   totalRent: number;
