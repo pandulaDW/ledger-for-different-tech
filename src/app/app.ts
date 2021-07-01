@@ -1,8 +1,9 @@
 import express from "express";
-import { getLedgerEntries } from "./handlers";
+import ledgerRouter from "./routers/ledgerRouter";
 
 const app = express();
 
-app.get("/ledger", getLedgerEntries);
+// routers
+app.use("/api/v1/ledger", ledgerRouter);
 
 export default app;
