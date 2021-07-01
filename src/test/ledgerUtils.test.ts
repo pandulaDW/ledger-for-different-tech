@@ -1,4 +1,4 @@
-import { createDateSeq, createMonthSeq } from "../../app/utils/ledgerUtils";
+import { createDateSeq, createMonthSeq } from "../app/utils/ledgerUtils";
 
 describe("ledger utility unit tests", () => {
   const dateSeqListFortnightly = () => [

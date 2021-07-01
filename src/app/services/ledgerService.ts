@@ -7,8 +7,10 @@ export const createLedgerResponse = (req: LedgerRequest): LedgerResponse => {
   switch (req.frequency) {
     case Frequency.WEEKLY:
       dateSeq = createDateSeq(req.startDate, req.endDate, 7);
+      break;
     case Frequency.FORTNIGHTLY:
       dateSeq = createDateSeq(req.startDate, req.endDate, 14);
+      break;
     case Frequency.MONTHLY:
       dateSeq = createMonthSeq(req.startDate, req.endDate);
   }

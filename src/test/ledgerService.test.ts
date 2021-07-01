@@ -1,6 +1,6 @@
-import { Frequency, LedgerRequest } from "../../app/models";
-import { createLedgerItem } from "../../app/services";
-import { SeqItem } from "../../app/utils/ledgerUtils";
+import { Frequency, LedgerRequest } from "../app/models";
+import { createLedgerItem } from "../app/services";
+import { SeqItem } from "../app/utils/ledgerUtils";
 
 describe("ledger service unit tests", () => {
   test("returns correct ledger line for full-range WEEKLY seq item", () => {

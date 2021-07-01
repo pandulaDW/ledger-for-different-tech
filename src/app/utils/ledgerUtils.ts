@@ -1,4 +1,4 @@
-import { addDays, differenceInCalendarDays as diff } from "date-fns";
+import { addDays, isEqual, isAfter, differenceInCalendarDays as diff } from "date-fns";
 import { getNextMonthDate } from "./dateUtils";
 
 // return list item type of createDateSeq function
@@ -26,7 +26,7 @@ export const createDateSeq = (startDate: Date, endDate: Date, freq: number) => {
   const dateSeq: Array<SeqItem> = [createSeqItem(currentStartDate, currentEndDate, freq)];
 
   while (true) {
-    if (currentEndDate >= endDate) {
+    if (isEqual(currentEndDate, endDate) || isAfter(currentEndDate, endDate)) {
       dateSeq.pop();
       dateSeq.push(
         createSeqItem(currentStartDate, endDate, diff(endDate, currentStartDate) + 1)
@@ -50,9 +50,9 @@ export const createMonthSeq = (startDate: Date, endDate: Date) => {
   const dateSeq = [createSeqItem(currentStartDate, currentEndDate, 0)];
 
   while (true) {
-    if (currentEndDate >= endDate) {
+    if (isEqual(currentEndDate, endDate) || isAfter(currentEndDate, endDate)) {
       dateSeq.pop();
-      if (currentEndDate.toISOString() === endDate.toISOString())
+      if (isEqual(currentEndDate, endDate))
         dateSeq.push(createSeqItem(currentStartDate, endDate, 0, true));
       else
         dateSeq.push(

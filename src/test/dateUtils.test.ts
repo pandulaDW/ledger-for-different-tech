@@ -1,4 +1,4 @@
-import { getNextMonthDate } from "../../app/utils/dateUtils";
+import { getNextMonthDate } from "../app/utils/dateUtils";
 
 describe("date utility unit tests", () => {
   test("returns nextMonthDate correctly when the date is available", () => {
