@@ -1,5 +1,5 @@
 import { addDays, differenceInCalendarDays as diff } from "date-fns";
-import { getNextMonthDate } from "../utils/dateUtils";
+import { getNextMonthDate } from "./dateUtils";
 
 // return list item type of createDateSeq function
 export interface SeqItem {
@@ -23,13 +23,13 @@ const createSeqItem = (start: Date, end: Date, dateDiff = 0, isFullRange = true)
 export const createDateSeq = (startDate: Date, endDate: Date, freq: number) => {
   let currentStartDate = startDate;
   let currentEndDate = addDays(startDate, freq - 1);
-  const dateSeq = [createSeqItem(currentStartDate, currentEndDate, freq)];
+  const dateSeq: Array<SeqItem> = [createSeqItem(currentStartDate, currentEndDate, freq)];
 
   while (true) {
     if (currentEndDate >= endDate) {
       dateSeq.pop();
       dateSeq.push(
-        createSeqItem(currentStartDate, endDate, diff(endDate, currentStartDate))
+        createSeqItem(currentStartDate, endDate, diff(endDate, currentStartDate) + 1)
       );
       break;
     }
@@ -47,12 +47,12 @@ export const createMonthSeq = (startDate: Date, endDate: Date) => {
   const requiredDay = startDate.getDate();
   let currentStartDate = startDate;
   let currentEndDate = getNextMonthDate(startDate, requiredDay);
-  const dateSeq = [createSeqItem(currentStartDate, currentEndDate, 0)];
+  const dateSeq: Array<SeqItem> = [createSeqItem(currentStartDate, currentEndDate, 0)];
 
   // if the end date doesn't even fullfil one month
   if (currentEndDate > endDate) {
     dateSeq.pop();
-    return [createSeqItem(startDate, endDate, diff(endDate, startDate), false)];
+    return [createSeqItem(startDate, endDate, diff(endDate, startDate) + 1, false)];
   }
 
   while (true) {
@@ -66,7 +66,12 @@ export const createMonthSeq = (startDate: Date, endDate: Date) => {
           : addDays(currentEndDate, 1);
       dateSeq.pop();
       dateSeq.push(
-        createSeqItem(currentStartDate, endDate, diff(endDate, currentStartDate), false)
+        createSeqItem(
+          currentStartDate,
+          endDate,
+          diff(endDate, currentStartDate) + 1,
+          false
+        )
       );
       break;
     }

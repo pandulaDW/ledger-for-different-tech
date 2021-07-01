@@ -1,5 +1,5 @@
 import { Frequency, LedgerRequest, LedgerResponse } from "../models";
-import { createDateSeq, SeqItem } from "./ledgerUtils";
+import { createDateSeq, createMonthSeq, SeqItem } from "../utils/ledgerUtils";
 
 export const createLedgerResponse = (req: LedgerRequest): LedgerResponse => {
   const { frequency, weeklyRent } = req;
@@ -11,7 +11,7 @@ export const createLedgerResponse = (req: LedgerRequest): LedgerResponse => {
     case Frequency.FORTNIGHTLY:
       dateSeq = createDateSeq(req.startDate, req.endDate, 14);
     case Frequency.MONTHLY:
-      dateSeq = [];
+      dateSeq = createMonthSeq(req.startDate, req.endDate);
   }
 
   const ledgerResponse: LedgerResponse = dateSeq.map((seqItem) => {
