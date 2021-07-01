@@ -1,5 +1,6 @@
 import { query } from "express-validator";
-import { Frequency } from "../models";
+import { isBefore, isValid } from "date-fns";
+import { Frequency, IndexType } from "../models";
 
 // compiling regex expressions for improved performance
 const frequencyRegex = new RegExp(
@@ -20,7 +21,16 @@ export const ledgerRequestValidation = [
     .withMessage("end_date cannot be undefined")
     .bail()
     .isISO8601()
-    .withMessage("end_date is not a valid ISO date"),
+    .withMessage("end_date is not a valid ISO date")
+    .bail()
+    .custom((endDate, { req }) => {
+      const query = req.query as IndexType;
+      const startDate = new Date(query["start_date"]);
+      if (isValid(startDate) && isBefore(new Date(endDate), startDate)) {
+        throw new Error("start_date should come before the end_date");
+      }
+      return true;
+    }),
 
   query("frequency")
     .notEmpty()

@@ -41,6 +41,7 @@ describe("ledger request integration tests", () => {
     ${"start_date"}  | ${"2020-13-05"}     | ${"start_date is not a valid ISO date"}
     ${"end_date"}    | ${"test-date"}      | ${"end_date is not a valid ISO date"}
     ${"end_date"}    | ${"2020-11-35"}     | ${"end_date is not a valid ISO date"}
+    ${"end_date"}    | ${"2019-11-25"}     | ${"start_date should come before the end_date"}
     ${"frequency"}   | ${"test-frequency"} | ${"frequency should be one of WEEKLY, FORTNIGHTLY or MONTHLY"}
     ${"weekly_rent"} | ${"test-rent"}      | ${"weekly_rent should be a numeric value"}
     ${"timezone"}    | ${"America/"}       | ${"timezone should be valid timezone name"}
@@ -76,14 +77,14 @@ describe("ledger request integration tests", () => {
         const response = yield postRequest(convertToQueryString(validRequest));
         expect(response.statusCode).toBe(200);
     }));
-    test("returns 200 status code when frequency is of desired value", () => {
+    test("returns 200 status code when frequency is of desired value", () => __awaiter(void 0, void 0, void 0, function* () {
         Object.keys(models_1.Frequency).forEach((key) => __awaiter(void 0, void 0, void 0, function* () {
             const request = Object.assign({}, validRequest);
             request["frequency"] = key;
             const response = yield postRequest(convertToQueryString(request));
             expect(response.statusCode).toBe(200);
         }));
-    });
+    }));
     test("returns correct response for a valid WEEKLY request", () => __awaiter(void 0, void 0, void 0, function* () {
         const expected = {
             ledgerLines: [
