@@ -47,34 +47,28 @@ export const createMonthSeq = (startDate: Date, endDate: Date) => {
   const requiredDay = startDate.getDate();
   let currentStartDate = startDate;
   let currentEndDate = getNextMonthDate(startDate, requiredDay);
-  const dateSeq: Array<SeqItem> = [createSeqItem(currentStartDate, currentEndDate, 0)];
-
-  // if the end date doesn't even fullfil one month
-  if (currentEndDate > endDate) {
-    dateSeq.pop();
-    return [createSeqItem(startDate, endDate, diff(endDate, startDate) + 1, false)];
-  }
+  const dateSeq = [createSeqItem(currentStartDate, currentEndDate, 0)];
 
   while (true) {
+    if (currentEndDate >= endDate) {
+      dateSeq.pop();
+      if (currentEndDate.toISOString() === endDate.toISOString())
+        dateSeq.push(createSeqItem(currentStartDate, endDate, 0, true));
+      else
+        dateSeq.push(
+          createSeqItem(
+            currentStartDate,
+            endDate,
+            diff(endDate, currentStartDate) + 1,
+            false
+          )
+        );
+      break;
+    }
+
     currentStartDate = addDays(currentEndDate, 1);
     currentEndDate = getNextMonthDate(currentEndDate, requiredDay);
     dateSeq.push(createSeqItem(currentStartDate, currentEndDate, 0));
-    if (currentEndDate >= endDate) {
-      currentStartDate =
-        addDays(currentEndDate, 1) > endDate
-          ? currentStartDate
-          : addDays(currentEndDate, 1);
-      dateSeq.pop();
-      dateSeq.push(
-        createSeqItem(
-          currentStartDate,
-          endDate,
-          diff(endDate, currentStartDate) + 1,
-          false
-        )
-      );
-      break;
-    }
   }
 
   return dateSeq;

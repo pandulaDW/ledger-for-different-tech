@@ -1,4 +1,4 @@
-import { createDateSeq } from "../../app/utils/ledgerUtils";
+import { createDateSeq, createMonthSeq } from "../../app/utils/ledgerUtils";
 
 describe("ledger utility unit tests", () => {
   const dateSeqListFortnightly = () => [
@@ -101,6 +101,58 @@ describe("ledger utility unit tests", () => {
         endDate: "2020-04-01T00:00:00.000Z",
         dateDiff: 5,
         isFullRange: true,
+      },
+    ]);
+  });
+
+  const dateSeqListMonthly = () => [
+    {
+      startDate: "2020-08-31T00:00:00.000Z",
+      endDate: "2020-09-30T00:00:00.000Z",
+      dateDiff: 0,
+      isFullRange: true,
+    },
+    {
+      startDate: "2020-10-01T00:00:00.000Z",
+      endDate: "2020-10-31T00:00:00.000Z",
+      dateDiff: 0,
+      isFullRange: true,
+    },
+    {
+      startDate: "2020-11-01T00:00:00.000Z",
+      endDate: "2020-11-25T00:00:00.000Z",
+      dateDiff: 25,
+      isFullRange: false,
+    },
+  ];
+
+  test("returns a correctly generated MONTHLY SeqItem list for two given dates", () => {
+    expect(createMonthSeq(new Date("2020-08-31"), new Date("2020-11-25"))).toEqual(
+      dateSeqListMonthly()
+    );
+  });
+
+  test("returns a correctly generated MONTHLY SeqItem list when end day is a payment day", () => {
+    const seqList = dateSeqListMonthly();
+    seqList.pop();
+    seqList.push({
+      startDate: "2020-11-01T00:00:00.000Z",
+      endDate: "2020-11-30T00:00:00.000Z",
+      dateDiff: 0,
+      isFullRange: true,
+    });
+    expect(createMonthSeq(new Date("2020-08-31"), new Date("2020-11-30"))).toEqual(
+      seqList
+    );
+  });
+
+  test("returns a correctly generated MONTHLY SeqItem list when end day is before the first payment day", () => {
+    expect(createMonthSeq(new Date("2020-08-31"), new Date("2020-09-15"))).toEqual([
+      {
+        startDate: "2020-08-31T00:00:00.000Z",
+        endDate: "2020-09-15T00:00:00.000Z",
+        dateDiff: 16,
+        isFullRange: false,
       },
     ]);
   });

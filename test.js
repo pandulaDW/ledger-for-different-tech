@@ -1,6 +1,23 @@
-const { addDays, differenceInCalendarDays: diff } = require("date-fns");
+const {
+  addMonths,
+  lastDayOfMonth,
+  addDays,
+  differenceInCalendarDays: diff,
+} = require("date-fns");
 
-const createSeqItem = (start, end, dateDiff, isFullRange = true) => {
+const getNextMonthDate = (date, requiredDay) => {
+  const nextMonthDate = addMonths(date, 1);
+
+  if (lastDayOfMonth(nextMonthDate).getDate() < requiredDay) {
+    return nextMonthDate;
+  }
+
+  return new Date(
+    Date.UTC(nextMonthDate.getFullYear(), nextMonthDate.getMonth(), requiredDay)
+  );
+};
+
+const createSeqItem = (start, end, dateDiff = 0, isFullRange = true) => {
   return {
     startDate: start.toISOString(),
     endDate: end.toISOString(),
@@ -9,29 +26,39 @@ const createSeqItem = (start, end, dateDiff, isFullRange = true) => {
   };
 };
 
-const createDateSeq = (startDate, endDate, freq) => {
+const createMonthSeq = (startDate, endDate) => {
+  const requiredDay = startDate.getDate();
   let currentStartDate = startDate;
-  let currentEndDate = addDays(startDate, freq - 1);
-  const dateSeq = [createSeqItem(currentStartDate, currentEndDate, freq)];
+  let currentEndDate = getNextMonthDate(startDate, requiredDay);
+  const dateSeq = [createSeqItem(currentStartDate, currentEndDate, 0)];
 
   while (true) {
     if (currentEndDate >= endDate) {
+      console.log(currentEndDate, endDate);
       dateSeq.pop();
-      dateSeq.push(
-        createSeqItem(currentStartDate, endDate, diff(endDate, currentStartDate))
-      );
+      if (currentEndDate.toISOString() === endDate.toISOString())
+        dateSeq.push(createSeqItem(currentStartDate, endDate, 0, true));
+      else
+        dateSeq.push(
+          createSeqItem(
+            currentStartDate,
+            endDate,
+            diff(endDate, currentStartDate) + 1,
+            false
+          )
+        );
       break;
     }
 
     currentStartDate = addDays(currentEndDate, 1);
-    currentEndDate = addDays(currentStartDate, freq - 1);
-    const tuple = createSeqItem(currentStartDate, currentEndDate, freq);
-    dateSeq.push(tuple);
+    currentEndDate = getNextMonthDate(currentEndDate, requiredDay);
+    dateSeq.push(createSeqItem(currentStartDate, currentEndDate, 0));
   }
 
   return dateSeq;
 };
 
-let x1 = new Date("2020-03-28");
-let x2 = new Date("2020-04-05");
-console.log(createDateSeq(x1, x2, 7));
+let x1 = new Date("2020-08-31");
+let x2 = new Date("2020-11-24");
+
+console.log(createMonthSeq(x1, x2));
