@@ -21,11 +21,6 @@ const convertToQueryString = (body: IndexType) => {
 };
 
 describe("ledger request integration tests", () => {
-  test("returns 200 status code when a valid request is used", async () => {
-    const response = await postRequest(convertToQueryString(validRequest));
-    expect(response.statusCode).toBe(200);
-  });
-
   test.each`
     field            | value               | expectedMessage
     ${"start_date"}  | ${undefined}        | ${"start_date cannot be undefined"}
@@ -54,6 +49,28 @@ describe("ledger request integration tests", () => {
       expect(response.body.validationErrors[field]).toBe(expectedMessage);
     }
   );
+
+  test("returns multiple validation errors correctly", async () => {
+    const expected = {
+      validationErrors: {
+        end_date: "end_date cannot be undefined",
+        frequency: "frequency should be one of WEEKLY, FORTNIGHTLY or MONTHLY",
+        weekly_rent: "weekly_rent should be a numeric value",
+      },
+    };
+    const request = { ...validRequest };
+    delete request["end_date"];
+    request["frequency"] = "Weekly";
+    request["weekly_rent"] = "12TW";
+    const response = await postRequest(convertToQueryString(request));
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual(expected);
+  });
+
+  test("returns 200 status code when a valid request is used", async () => {
+    const response = await postRequest(convertToQueryString(validRequest));
+    expect(response.statusCode).toBe(200);
+  });
 
   test("returns 200 status code when frequency is of desired value", () => {
     Object.keys(Frequency).forEach(async (key) => {
