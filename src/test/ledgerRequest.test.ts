@@ -93,7 +93,7 @@ describe("ledger request integration tests", () => {
         {
           startDate: "2020-03-31T00:00:00.000Z",
           endDate: "2020-04-03T00:00:00.000Z",
-          totalRent: 317.14285714285717,
+          totalRent: 317.14,
         },
       ],
       numberOfLedgerLines: 2,
@@ -125,7 +125,7 @@ describe("ledger request integration tests", () => {
         {
           startDate: "2020-04-25T00:00:00.000Z",
           endDate: "2020-05-03T00:00:00.000Z",
-          totalRent: 713.5714285714287,
+          totalRent: 713.57,
         },
       ],
       numberOfLedgerLines: 3,
@@ -148,17 +148,17 @@ describe("ledger request integration tests", () => {
         {
           startDate: "2020-08-31T00:00:00.000Z",
           endDate: "2020-09-30T00:00:00.000Z",
-          totalRent: 2411.607142857143,
+          totalRent: 2411.61,
         },
         {
           startDate: "2020-10-01T00:00:00.000Z",
           endDate: "2020-10-31T00:00:00.000Z",
-          totalRent: 2411.607142857143,
+          totalRent: 2411.61,
         },
         {
           startDate: "2020-11-01T00:00:00.000Z",
           endDate: "2020-11-27T00:00:00.000Z",
-          totalRent: 2140.714285714286,
+          totalRent: 2140.71,
         },
       ],
       numberOfLedgerLines: 3,

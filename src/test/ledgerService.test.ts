@@ -18,7 +18,7 @@ describe("ledger service unit tests", () => {
         { frequency: Frequency.WEEKLY, weeklyRent: 555 } as LedgerRequest,
         { dateDiff: 4 } as SeqItem
       ).totalRent
-    ).toBe(317.14285714285717);
+    ).toBe(317.14);
   });
 
   test("returns correct ledger line for full-range FORTNIGHTLY seq item", () => {
@@ -36,7 +36,7 @@ describe("ledger service unit tests", () => {
         { frequency: Frequency.FORTNIGHTLY, weeklyRent: 555 } as LedgerRequest,
         { dateDiff: 10 } as SeqItem
       ).totalRent
-    ).toBe(792.8571428571429);
+    ).toBe(792.86);
   });
 
   test("returns correct ledger line for full-range MONTHLY seq item", () => {
@@ -45,7 +45,7 @@ describe("ledger service unit tests", () => {
         { frequency: Frequency.MONTHLY, weeklyRent: 555 } as LedgerRequest,
         { isFullRange: true } as SeqItem
       ).totalRent
-    ).toBe(2411.607142857143);
+    ).toBe(2411.61);
   });
 
   test("returns correct ledger line for partial-range MONTHLY seq item", () => {
@@ -54,6 +54,6 @@ describe("ledger service unit tests", () => {
         { frequency: Frequency.FORTNIGHTLY, weeklyRent: 555 } as LedgerRequest,
         { dateDiff: 24 } as SeqItem
       ).totalRent
-    ).toBe(1902.8571428571431);
+    ).toBe(1902.86);
   });
 });

@@ -27,16 +27,16 @@ export const createLedgerItem = (req: LedgerRequest, item: SeqItem): LedgerLineI
   const { startDate, endDate, dateDiff, isFullRange } = item;
 
   if (dateDiff === 7 && frequency === Frequency.WEEKLY) {
-    return { startDate, endDate, totalRent: weeklyRent };
+    return { startDate, endDate, totalRent: +weeklyRent.toFixed(2) };
   }
 
   if (dateDiff === 14 && frequency === Frequency.FORTNIGHTLY) {
-    return { startDate, endDate, totalRent: weeklyRent * 2 };
+    return { startDate, endDate, totalRent: +(weeklyRent * 2).toFixed(2) };
   }
 
   if (isFullRange && frequency === Frequency.MONTHLY) {
-    return { startDate, endDate, totalRent: ((weeklyRent / 7) * 365) / 12 };
+    return { startDate, endDate, totalRent: +(((weeklyRent / 7) * 365) / 12).toFixed(2) };
   }
 
-  return { startDate, endDate, totalRent: (weeklyRent / 7) * dateDiff };
+  return { startDate, endDate, totalRent: +((weeklyRent / 7) * dateDiff).toFixed(2) };
 };
