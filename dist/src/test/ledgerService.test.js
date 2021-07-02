@@ -7,19 +7,19 @@ describe("ledger service unit tests", () => {
         expect(services_1.createLedgerItem({ frequency: models_1.Frequency.WEEKLY, weeklyRent: 555 }, { dateDiff: 7 }).totalRent).toBe(555);
     });
     test("returns correct ledger line for partial-range WEEKLY seq item", () => {
-        expect(services_1.createLedgerItem({ frequency: models_1.Frequency.WEEKLY, weeklyRent: 555 }, { dateDiff: 4 }).totalRent).toBe(317.14285714285717);
+        expect(services_1.createLedgerItem({ frequency: models_1.Frequency.WEEKLY, weeklyRent: 555 }, { dateDiff: 4 }).totalRent).toBe(317.14);
     });
     test("returns correct ledger line for full-range FORTNIGHTLY seq item", () => {
         expect(services_1.createLedgerItem({ frequency: models_1.Frequency.FORTNIGHTLY, weeklyRent: 555 }, { dateDiff: 14 }).totalRent).toBe(1110);
     });
     test("returns correct ledger line for partial-range FORTNIGHTLY seq item", () => {
-        expect(services_1.createLedgerItem({ frequency: models_1.Frequency.FORTNIGHTLY, weeklyRent: 555 }, { dateDiff: 10 }).totalRent).toBe(792.8571428571429);
+        expect(services_1.createLedgerItem({ frequency: models_1.Frequency.FORTNIGHTLY, weeklyRent: 555 }, { dateDiff: 10 }).totalRent).toBe(792.86);
     });
     test("returns correct ledger line for full-range MONTHLY seq item", () => {
-        expect(services_1.createLedgerItem({ frequency: models_1.Frequency.MONTHLY, weeklyRent: 555 }, { isFullRange: true }).totalRent).toBe(2411.607142857143);
+        expect(services_1.createLedgerItem({ frequency: models_1.Frequency.MONTHLY, weeklyRent: 555 }, { isFullRange: true }).totalRent).toBe(2411.61);
     });
     test("returns correct ledger line for partial-range MONTHLY seq item", () => {
-        expect(services_1.createLedgerItem({ frequency: models_1.Frequency.FORTNIGHTLY, weeklyRent: 555 }, { dateDiff: 24 }).totalRent).toBe(1902.8571428571431);
+        expect(services_1.createLedgerItem({ frequency: models_1.Frequency.FORTNIGHTLY, weeklyRent: 555 }, { dateDiff: 24 }).totalRent).toBe(1902.86);
     });
 });
 //# sourceMappingURL=ledgerService.test.js.map
