@@ -6,7 +6,7 @@ const express_validator_1 = require("express-validator");
 const constructLedgerValidationResponse = (req, _, next) => {
     const errors = express_validator_1.validationResult(req);
     if (errors.isEmpty())
-        next();
+        return next();
     let validationResponse = { validationErrors: {} };
     errors.array().forEach((error) => {
         validationResponse["validationErrors"] = Object.assign(Object.assign({}, validationResponse["validationErrors"]), { [error.param]: error.msg });
