@@ -1,9 +1,17 @@
 import express from "express";
-import { ledgerRequestValidation } from "../middlewares";
+import {
+  ledgerRequestValidation,
+  constructLedgerValidationResponse,
+} from "../middlewares";
 import { getLedgerEntries } from "../handlers";
 
 const router = express.Router();
 
-router.get("/", ledgerRequestValidation, getLedgerEntries);
+router.get(
+  "/",
+  ledgerRequestValidation,
+  constructLedgerValidationResponse,
+  getLedgerEntries
+);
 
 export default router;

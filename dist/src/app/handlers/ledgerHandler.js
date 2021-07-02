@@ -1,16 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getLedgerEntries = void 0;
-const express_validator_1 = require("express-validator");
 const services_1 = require("../services");
 const getLedgerEntries = (req, res) => {
-    const errors = express_validator_1.validationResult(req);
-    if (!errors.isEmpty()) {
-        let validationResponse = { validationErrors: {} };
-        errors.array().forEach((error) => {
-            validationResponse["validationErrors"] = Object.assign(Object.assign({}, validationResponse["validationErrors"]), { [error.param]: error.msg });
-        });
-        return res.status(400).json(validationResponse);
+    if (req.validationErrors) {
+        return res.status(400).json(req.validationErrors);
     }
     const ledgerRequest = {
         startDate: new Date(req.query["start_date"]),

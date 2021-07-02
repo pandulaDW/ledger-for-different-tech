@@ -1,19 +1,10 @@
 import { Request, Response } from "express";
-import { validationResult } from "express-validator";
 import { createLedgerResponse } from "../services";
-import { Frequency, LedgerRequest, ValidationErrors } from "../models";
+import { Frequency, LedgerRequest } from "../models";
 
 export const getLedgerEntries = (req: Request, res: Response) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    let validationResponse: ValidationErrors = { validationErrors: {} };
-    errors.array().forEach((error) => {
-      validationResponse["validationErrors"] = {
-        ...validationResponse["validationErrors"],
-        [error.param]: error.msg,
-      };
-    });
-    return res.status(400).json(validationResponse);
+  if (req.validationErrors) {
+    return res.status(400).json(req.validationErrors);
   }
 
   const ledgerRequest: LedgerRequest = {
