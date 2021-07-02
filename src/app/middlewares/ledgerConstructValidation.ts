@@ -5,7 +5,7 @@ import { ValidationErrors } from "../models";
 // will run after the request validation and construct the validation object
 export const constructLedgerValidationResponse: Handler = (req, _, next) => {
   const errors = validationResult(req);
-  if (errors.isEmpty()) next();
+  if (errors.isEmpty()) return next();
 
   let validationResponse: ValidationErrors = { validationErrors: {} };
 
